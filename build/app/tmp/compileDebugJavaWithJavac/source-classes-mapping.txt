@@ -1,0 +1,6 @@
+io/flutter/plugins/GeneratedPluginRegistrant.java
+ io.flutter.plugins.GeneratedPluginRegistrant
+com/example/shoppeez/BuildConfig.java
+ com.example.shoppeez.BuildConfig
+com/example/shoppeez/MainActivity.java
+ com.example.shoppeez.MainActivity
