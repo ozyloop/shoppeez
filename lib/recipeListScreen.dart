@@ -25,6 +25,8 @@ class RecipeListScreenState extends State<RecipeListScreen>
   int _selectedIndex=1;
   late TextEditingController _controller;
 
+  final List<String> entries = <String>['A', 'B', 'C'];
+  final List<int> colorCodes = <int>[600, 500, 100];
   @override
   void _onItemTapped(int index)
   {
@@ -191,46 +193,86 @@ class RecipeListScreenState extends State<RecipeListScreen>
           if (snapshot.hasData)
           {
             List<Ingredient>? ingredients = snapshot.data;
-            return Column(children:
+            return
+              Stack(
+                  children:
               [
-                Container(
-                  padding: const EdgeInsets.all(8),
-                  child:TextField(
-                    controller: _controller,
-                    onSubmitted: (String value) async
-                    {
-                      await showDialog<void>(
-                        context: context,
-                        builder: (BuildContext context)
+                      ListView(children:[Container(child:
+
+
+              ListView.builder(
+                scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(8),
+          itemCount: entries.length,
+          itemBuilder: (BuildContext context, int index) {
+          return Container(
+          height: 50,
+          color: Colors.amber[colorCodes[index]],
+          child: Center(child: Text('Entry ${entries[index]}')),
+          );
+          }
+          ),
+
+
+
+                              ),
+
+
+                      //use after when clic on the research button
+                      /*TextField(
+                        controller: _controller,
+                        onSubmitted: (String value) async
                         {
-                          return AlertDialog(
-                            title: const Text('Thanks!'),
-                            content: Text('You typed "$value", which has length ${value.characters.length}.'),
-                            actions: <Widget>[
-                            ],
+                          await showDialog<void>(
+                            context: context,
+                            builder: (BuildContext context)
+                            {
+                              return AlertDialog(
+                                title: const Text('Thanks!'),
+                                content: Text('You typed "$value", which has length ${value.characters.length}.'),
+                                actions: <Widget>[
+                                ],
+                              );
+                            },
                           );
                         },
-                      );
-                    },
-                    decoration: InputDecoration(
-                      hintText: 'ingredients',
-                      labelText: 'What do you have to cook ? ',
-                      prefixIcon: Icon(Icons.food_bank, color: Colors.red),
-                      // icon: Icon(Icons.food),
-                      suffixIcon: _controller.text.isEmpty
-                      ? Container(width: 0) :
-                      IconButton(
-                        icon: Icon(Icons.close),
-                        onPressed: () =>  _controller.text ="",
-                      ),
-                      border: OutlineInputBorder(),
-                    ),
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.done,
-                  )
-                ),
-                Container(
-                ),
+                        decoration: InputDecoration(
+                          hintText: 'ingredients',
+                          labelText: 'What do you have to cook ? ',
+                          prefixIcon: Icon(Icons.food_bank, color: Colors.red),
+                          // icon: Icon(Icons.food),
+                          suffixIcon: _controller.text.isEmpty
+                              ? Container(width: 0) :
+                          IconButton(
+                            icon: Icon(Icons.close),
+                            onPressed: () =>  _controller.text ="",
+                          ),
+                          border: OutlineInputBorder(),
+                        ),
+                        keyboardType: TextInputType.emailAddress,
+                        textInputAction: TextInputAction.done,
+                      )*/
+
+                  Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8),
+                      child:Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children:
+                        [
+                          Text("Sort by :  "),
+                          Text("A-Z"),
+                          IconButton(
+                            icon: Icon(Icons.arrow_drop_down),
+                            onPressed: () =>  _controller.text ="",
+                          ),
+                        ],
+                      )
+                  ),
+
+              Container(
+                width: MediaQuery.of(context).size.width,
+                height: 600,
+                child:
                 Expanded(
                   child: ListView.builder(
                     itemCount: ingredients!.length,
@@ -238,25 +280,43 @@ class RecipeListScreenState extends State<RecipeListScreen>
                     {
                       final ingredient = ingredients[index];
                       return Dismissible(key: Key(ingredient.name),
-                        onDismissed: (direction)
-                        {
-                          setState(()
+                          onDismissed: (direction)
+                          {
+                            setState(()
                             {
                               IngredientDataBase.instance.deleteIngredient(ingredient.name);
                             }
-                          );
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text("${ingredient.name} supprimé"))
-                          );
-                        },
-                        background: Container(color: Colors.grey),
-                        child: ShopItemWidget(ingredient: ingredient)
+                            );
+                            ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text("${ingredient.name} supprimé"))
+                            );
+                          },
+                          background: Container(color: Colors.grey),
+                          child: ShopItemWidget(ingredient: ingredient)
                       );
                     },
                   ),
-                )
+                ),
+              ),
+            ]
+          ),
+                    Positioned(
+                      bottom:10,
+                      right: 10,
+
+                      child: ElevatedButton(
+                        style: TextButton.styleFrom(primary: Colors.black, backgroundColor: Colors.orange, fixedSize: Size(60,55), minimumSize: Size(50,40)),
+
+
+                        onPressed: () {},
+                        child: const Icon(Icons.search, size:30 ),
+
+                      ),
+                      )
+
+
               ]
-            );
+              );
           }
           else
           {
@@ -264,6 +324,7 @@ class RecipeListScreenState extends State<RecipeListScreen>
           }
         }
       ),
+
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>
         [
