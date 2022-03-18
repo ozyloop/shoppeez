@@ -43,7 +43,8 @@ class RecipeScreen extends StatelessWidget {
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildButtonColumn(Colors.blue, Icons.thumb_up, "Like"),
+            _buildButtonColumn(Colors.blue, Icons.people, "2"),
+            _buildButtonColumn(Colors.blue, Icons.food_bank, "Ingredients"),
             _buildButtonColumn(Colors.blue, Icons.add_shopping_cart, "Add List")
           ] ),);
 

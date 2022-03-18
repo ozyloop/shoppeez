@@ -25,8 +25,6 @@ class RecipeListScreenState extends State<RecipeListScreen>
   int _selectedIndex=1;
   late TextEditingController _controller;
 
-  final List<String> entries = <String>['A', 'B', 'C'];
-  final List<int> colorCodes = <int>[600, 500, 100];
   @override
   void _onItemTapped(int index)
   {
@@ -198,20 +196,43 @@ class RecipeListScreenState extends State<RecipeListScreen>
                   children:
               [
                       ListView(children:[Container(child:
+Expanded(child:
+Row(mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      TextButton(
+          child: Text('Meat'),
+          style: TextButton.styleFrom(primary: Colors.pinkAccent),
+          onPressed: () {
+            print('Pressed');
+          }),
+      TextButton(
+          child: Text('Fish'),
+          style: TextButton.styleFrom(primary: Colors.pinkAccent),
+          onPressed: () {
+            print('Pressed');
+          }),
+      TextButton(
+          child: Text('Drink'),
+          style: TextButton.styleFrom(primary: Colors.pinkAccent),
+          onPressed: () {
+            print('Pressed');
+          }),
+      TextButton(
+          child: Text('Diary'),
+          style: TextButton.styleFrom(primary: Colors.pinkAccent),
+          onPressed: () {
+            print('Pressed');
+          }),
+  TextButton(
+      child: Text('Vegetables'),
+      style: TextButton.styleFrom(primary: Colors.pinkAccent),
+      onPressed: () {
+        print('Pressed');
+      }),
 
 
-              ListView.builder(
-                scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(8),
-          itemCount: entries.length,
-          itemBuilder: (BuildContext context, int index) {
-          return Container(
-          height: 50,
-          color: Colors.amber[colorCodes[index]],
-          child: Center(child: Text('Entry ${entries[index]}')),
-          );
-          }
-          ),
+
+])),
 
 
 
@@ -351,6 +372,7 @@ class RecipeListScreenState extends State<RecipeListScreen>
 // need to indent the next part//
 
 //widget for the recipe part
+
 class RecipeItemWidget extends StatelessWidget
 {
   const RecipeItemWidget({Key? key, required this.recipe}) : super(key: key);
@@ -569,6 +591,12 @@ class ShopItemWidget extends StatelessWidget
             //padding: const EdgeInsets.only(right: 8),
             children:
             [
+              IconButton(
+                  icon: Icon(Icons.remove),
+                  color: Colors.red,
+                  onPressed: () => print("works")
+              ),
+              Text("3"),
               IconButton(
                 icon: Icon(Icons.add),
                 color: Colors.red,
