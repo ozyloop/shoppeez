@@ -68,141 +68,145 @@ final List<Ingredient> defaultIngredients = [ Ingredient(
   "Butter",
   "dairy",
   "images/butter.jpg",
-  3,
+  150,
+  "g",
 
 ),
   Ingredient(
     "Cabbages",
     "vegetables",
     "images/cabbage.jpeg",
-    3,
+    100,
+    "g",
 
   ),
   Ingredient(
     "Carrots",
     "vegetables",
     "images/carrot.jpg",
-    3,
+    300,
+    "g",
 
   ),
   Ingredient(
     "Chickens",
     "animal products",
     "images/chicken.jpg",
-    3,
+    1500,
+    "g",
 
   ),
   Ingredient(
     "Chocolate",
     "dairy",
     "images/chocolate.jpg",
-    3,
-
+    300,
+    "g",
   ),
   Ingredient(
     "Chocolate2",
     "dairy",
     "images/chocolate2.jpeg",
-    3,
-
+    120,
+    "g",
   ),
   Ingredient(
     "Cinnamon",
     "spices",
     "images/cinnamon.jpg",
-    3,
-
+    30,
+    "g",
   ),
   Ingredient(
     "Cucumbers",
     "vegetables",
     "images/cucumber.jpeg",
-    3,
-
+    100,
+    "g",
   ),
   Ingredient(
     "Eggs",
     "animal products",
     "images/egg.jpg",
-    3,
-
+    4,
+    "unit",
   ),
   Ingredient(
     "Flour",
     "grains",
     "images/flour.jpg",
-    3,
-
+    300,
+    "g",
   ),
   Ingredient(
     "Lemons",
     "fruits",
     "images/lemon.jpeg",
-    3,
-
+    6,
+    "unit",
   ),
   Ingredient(
     "Beef",
     "animal products",
     "images/meat_cow.jpg",
-    3,
-
+    600,
+    "g",
   ),
   Ingredient(
     "Minced Meat",
     "animal products",
     "images/minced_meat.jpg",
-    3,
-
+    150,
+    "g",
   ),
   Ingredient(
     "Onions",
     "vegetables",
     "images/onion.jpg",
-    3,
-
+    5,
+    "unit",
   ),
   Ingredient(
     "Pepper",
     "spices",
     "images/pepper.jpeg",
-    3,
-
+    1,
+    "unit",
   ),
   Ingredient(
     "Potatoes",
     "vegetables",
     "images/potato.jpg",
-    3,
-
+    300,
+    "g",
   ),
   Ingredient(
     "Salt",
     "spices",
     "images/salt.jpg",
-    3,
-
+    1,
+    "unit",
   ),
   Ingredient(
     "Strawberry",
     "fruits",
     "images/strawberry.jpeg",
-    3,
-
+    300,
+    "g",
   ),
   Ingredient(
     "Sugar",
     "spices",
     "images/sugar.jpg",
-    3,
-
+    150,
+    "g",
   ),
   Ingredient(
     "Tomatoes",
     "vegetables",
     "images/tomato.jpeg",
-    3,
-
+    700,
+    "g",
   ),
 
 ];

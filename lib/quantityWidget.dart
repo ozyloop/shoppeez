@@ -13,6 +13,13 @@ class _QuantityTextWidgetState extends State<QuantityTextWidget> {
   @override
   Widget build(BuildContext context) {
     return Consumer<QuantityChangeNotifier>(
-        builder:(context,notifier,child) => Text(notifier.ingredientquantity.toString()));
+        builder: (context, notifier, child) =>
+
+            Row(children: [
+              Text(notifier.ingredientquantity.toString()),
+              Text(notifier.quantityType)])
+
+
+        );
   }
-}
+  }

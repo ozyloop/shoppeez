@@ -7,6 +7,9 @@ import 'package:shoppeez/recipeListScreen.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'RecipeScreenIngredient.dart';
+import 'ingredient.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -48,8 +51,22 @@ class RouteGenerator {
         } else {
           return pageNotFound();
         }
-      /*case '/newRecipe':
-        return MaterialPageRoute(builder: (context) => RecipeFormScreen());*/
+      case '/recipeIngredient':
+        var arguments = settings.arguments;
+        if (arguments != null) {
+          return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => RecipeScreenIngredient( ingredient: settings.arguments as Ingredient),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              }
+          );
+        } else {
+          return pageNotFound();
+        }
       default:
         return pageNotFound();
     }

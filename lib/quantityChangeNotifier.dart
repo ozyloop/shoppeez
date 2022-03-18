@@ -14,6 +14,7 @@ class QuantityChangeNotifier with ChangeNotifier {
 
 
   int get ingredientquantity => ingredient.quantity ;
+  String get quantityType => ingredient.quantityType;
   notifyListeners();
 
 }

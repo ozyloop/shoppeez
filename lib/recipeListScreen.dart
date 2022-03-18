@@ -516,6 +516,7 @@ class ShoppingListItemWidget extends StatelessWidget
             children:
             [
               Text(ingredient.quantity.toString()),
+              Text(" "+ingredient.quantityType),
               IconButton(
                 icon: Icon(Icons.add),
                 color: Colors.red,

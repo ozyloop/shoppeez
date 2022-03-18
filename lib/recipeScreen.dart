@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:path/path.dart';
 import 'package:shoppeez/favoriteChangeNotifier.dart';
+import 'package:shoppeez/ingredientDatabase.dart';
 import 'package:shoppeez/recipe.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:provider/provider.dart';
@@ -43,9 +45,9 @@ class RecipeScreen extends StatelessWidget {
       Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            _buildButtonColumn(Colors.blue, Icons.people, "2"),
-            _buildButtonColumn(Colors.blue, Icons.food_bank, "Ingredients"),
-            _buildButtonColumn(Colors.blue, Icons.add_shopping_cart, "Add List")
+            _buildIconColumn(Colors.blue, Icons.people, "2"),
+            _buildButtonColumn(Colors.blue, Icons.food_bank, "Ingredients", context),
+            _buildButtonColumn(Colors.blue, Icons.add_shopping_cart, "Add List", context)
           ] ),);
 
     Widget descriptionSection = Container(
@@ -85,7 +87,30 @@ class RecipeScreen extends StatelessWidget {
     )
     );
   }
-  Column _buildButtonColumn(Color color, IconData icon, String label) {
+  Column _buildButtonColumn(Color color, IconData icon, String label, BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(bottom: 8),
+            child:
+            IconButton(
+                icon: Icon(icon),
+                color: color,
+                onPressed: () => Navigator.pushNamed(context, '/recipeIngredient', arguments: recipe,)
+            ),
+          ),
+
+          Text(label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: color,
+              ))
+        ]
+    );
+  }
+  Column _buildIconColumn(Color color, IconData icon, String label) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -93,7 +118,9 @@ class RecipeScreen extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 8),
             child:
             Icon(icon, color: color),
+
           ),
+
           Text(label,
               style: TextStyle(
                 fontSize: 16,

@@ -3,9 +3,9 @@ class Ingredient{
   String type;
   String imageUrl;
   int quantity;
+  String quantityType;
 
-
-  Ingredient(this.name, this.type, this.imageUrl, this.quantity);
+  Ingredient(this.name, this.type, this.imageUrl, this.quantity, this.quantityType);
 
   Map<String, dynamic> toMap() {
     return {
@@ -14,6 +14,7 @@ class Ingredient{
       'imageUrl': imageUrl,
 
       'quantity': quantity,
+      'quantityType': quantityType,
     };
   }
 
@@ -22,6 +23,7 @@ class Ingredient{
     map['type'],
     map['imageUrl'],
     map['quantity'],
+    map['quantityType'],
 
 
   );
