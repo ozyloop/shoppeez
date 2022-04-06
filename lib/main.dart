@@ -1,14 +1,18 @@
+
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shoppeez/loadingPage.dart';
 import 'package:shoppeez/recipeScreen.dart';
 import 'package:shoppeez/recipe.dart';
 import 'package:shoppeez/recipeListScreen.dart';
-
 
 import 'package:transparent_image/transparent_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import 'RecipeScreenIngredient.dart';
 import 'ingredient.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(MyApp());
@@ -27,12 +31,15 @@ class MyApp extends StatelessWidget {
         )
     );
   }
+
 }
 
 class RouteGenerator {
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch(settings.name) {
       case '/' :
+        //route to test page for database
+        //return MaterialPageRoute(builder: (context) => LoadingPage());
         return MaterialPageRoute(builder: (context) => RecipeListScreen());
 
       case '/recipe':
@@ -82,5 +89,7 @@ class RouteGenerator {
         )
     );
   }
+
+
 }
 

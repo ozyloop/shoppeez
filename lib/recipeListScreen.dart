@@ -8,6 +8,9 @@ import 'package:shoppeez/recipe.dart';
 
 import 'ingredientDatabase.dart';
 
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 class RecipeListScreen extends StatefulWidget
 {
   @override
@@ -35,12 +38,25 @@ class RecipeListScreenState extends State<RecipeListScreen>
     }
     );
   }
+
   @override
   void initState()
   {
     super.initState();
     _controller = TextEditingController();
   }
+  //method to have access to the database
+  @override
+  Future GetMethod() async
+  {
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/getData.php");
+    var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+    var responsBody = json.decode(res.body);
+    print("${responsBody[0]}");
+    print("space");
+    return responsBody;
+  }
+
   @override
   void dispose()
   {
