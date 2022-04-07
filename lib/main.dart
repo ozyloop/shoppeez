@@ -58,7 +58,7 @@ class RouteGenerator {
         } else {
           return pageNotFound();
         }
-      case '/recipeIngredient':
+      /*case '/recipeIngredient':
         var arguments = settings.arguments;
         if (arguments != null) {
           return PageRouteBuilder(
@@ -73,7 +73,7 @@ class RouteGenerator {
           );
         } else {
           return pageNotFound();
-        }
+        }*/
       default:
         return pageNotFound();
     }
