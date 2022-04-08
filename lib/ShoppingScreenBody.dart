@@ -27,11 +27,7 @@ class ShoppingScreenBody extends StatelessWidget
     return responsBody;
   }
 
-  @override
-  Future GetData(List<dynamic> data) async
-  {
 
-  }
   @override
   Widget build(BuildContext context)
   {
@@ -42,7 +38,21 @@ class ShoppingScreenBody extends StatelessWidget
           if (snapshot.hasData)
           {
             List<dynamic> ingredients = snapshot.data;
-            return Column(
+            return Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFF73AEF5),
+                    Color(0xFF61A4F1),
+                    Color(0xFF478DE0),
+                    Color(0xFF398AE5),
+                  ],
+                  stops: [0.1, 0.4, 0.7, 0.9],
+                ),
+              ),
+            child: Column(
                 children:
                 [
                   Expanded(
@@ -70,11 +80,26 @@ class ShoppingScreenBody extends StatelessWidget
                     ),
                   )
                 ]
-            );
+            ));
           }
           else
           {
-            return Center(child: Text("No Data"));
+            return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF73AEF5),
+                      Color(0xFF61A4F1),
+                      Color(0xFF478DE0),
+                      Color(0xFF398AE5),
+                    ],
+                    stops: [0.1, 0.4, 0.7, 0.9],
+                  ),
+                ),
+                child:Center(
+                    child: Text("No Data")));
           }
         }
     ) ;  }

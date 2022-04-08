@@ -4,8 +4,8 @@ import 'package:shoppeez/recipe.dart';
 
 class RecipeItemWidget extends StatelessWidget
 {
-  const RecipeItemWidget({Key? key, required this.recipe}) : super(key: key);
-  final Recipe recipe;
+  RecipeItemWidget(this.recipe) ;
+  final dynamic recipe;
   @override
   Widget build(BuildContext context)
   {
@@ -18,7 +18,10 @@ class RecipeItemWidget extends StatelessWidget
             arguments: recipe,
           );
         },
+
+
         child: Card(
+          color: Color(0xFFFFFFFF),
           margin: EdgeInsets.all(8),
           elevation: 4,
           child: Row(
@@ -31,9 +34,9 @@ class RecipeItemWidget extends StatelessWidget
                         children:
                         [
                           Hero(
-                              tag: "imageRecipe" + recipe.title,
+                              tag: "imageRecipe" + recipe["name"],
                               child:CachedNetworkImage(
-                                imageUrl: recipe.imageUrl,
+                                imageUrl: recipe["photo"],
                                 placeholder: (context, url) => Center(child: CircularProgressIndicator()),
                                 errorWidget: (context, url, error) => Icon(Icons.error),
                                 width: 100,
@@ -50,12 +53,12 @@ class RecipeItemWidget extends StatelessWidget
                                   Container(
                                     padding: const EdgeInsets.only(bottom: 8),
                                     child : Text(
-                                        recipe.title,
+                                        recipe["name"],
                                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20)
                                     ),
                                   ),
                                   Text(
-                                      recipe.user,
+                                      "Pas de User",
                                       style: TextStyle(color: Colors.grey[500], fontSize: 16)
                                   )
                                 ],
@@ -75,6 +78,7 @@ class RecipeItemWidget extends StatelessWidget
               ]
           ),
         )
+
     );
   }
 }

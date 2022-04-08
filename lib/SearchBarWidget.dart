@@ -2,7 +2,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-Future<Widget> SearchBar(context, _controller) async => TextField(
+Future<Widget> SearchBar(context, _controller) async => Container(
+    decoration: BoxDecoration(
+      color: Color(0xFF2320BD),
+      borderRadius: BorderRadius.circular(10.0),
+      boxShadow: [
+        BoxShadow(
+          color: Colors.black12,
+          blurRadius: 6.0,
+          offset: Offset(0, 2),
+        ),
+      ],
+    ),
+    child: TextField(
   controller: _controller,
   onSubmitted: (String value) async
   {
@@ -19,7 +31,9 @@ Future<Widget> SearchBar(context, _controller) async => TextField(
       },
     );
   },
+
   decoration: InputDecoration(
+
     hintText: 'ingredients',
     labelText: 'What do you have to cook ? ',
     prefixIcon: Icon(Icons.food_bank, color: Colors.red),
@@ -34,4 +48,4 @@ Future<Widget> SearchBar(context, _controller) async => TextField(
   ),
   keyboardType: TextInputType.emailAddress,
   textInputAction: TextInputAction.done,
-);
+));

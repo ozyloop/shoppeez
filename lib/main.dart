@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         onGenerateRoute: (settings) => RouteGenerator.generateRoute(settings),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.red,
+          primaryColor: Color(0xFF4C96EF),
         )
     );
   }
@@ -46,7 +46,7 @@ class RouteGenerator {
         var arguments = settings.arguments;
         if (arguments != null) {
           return PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => RecipeScreen(recipe: settings.arguments as Recipe),
+              pageBuilder: (context, animation, secondaryAnimation) => RecipeScreen( settings.arguments as dynamic),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 animation = CurvedAnimation(curve: Curves.ease, parent: animation);
                 return FadeTransition(

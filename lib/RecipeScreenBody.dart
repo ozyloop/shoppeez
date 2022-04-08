@@ -8,6 +8,8 @@ import 'SearchBarWidget.dart';
 import 'ShopItemWidget.dart';
 import 'ingredient.dart';
 import 'ingredientDatabase.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 
 class RecipeScreenBody extends StatelessWidget
@@ -15,20 +17,57 @@ class RecipeScreenBody extends StatelessWidget
 
   final TextEditingController _controller = TextEditingController();
   @override
+  Future GetMethod() async
+  {
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/GetRecipe.php");
+    var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+    var responsBody = json.decode(res.body);
+    print("${responsBody[0]}");
+    print("space");
+    return responsBody;
+  }
+
+  @override
   Widget build(BuildContext context)
   {
-    return FutureBuilder<List<Recipe>>(
-        future: RecipeDataBase.instance.recipes(),
-        builder: (BuildContext context, AsyncSnapshot<List<Recipe>> snapshot)
+    return FutureBuilder(
+        future: GetMethod(),
+        builder: (BuildContext context, AsyncSnapshot snapshot)
         {
           if (snapshot.hasData)
           {
-            List<Recipe>? recipes = snapshot.data;
-            return Column(children:
+            List<dynamic>? recipes = snapshot.data;
+            return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF73AEF5),
+                      Color(0xFF61A4F1),
+                      Color(0xFF478DE0),
+                      Color(0xFF398AE5),
+                    ],
+                    stops: [0.1, 0.4, 0.7, 0.9],
+                  ),
+                ),
+        child: Column(children:
             [
               Container(
-                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: Color(0xFF1860BA),
+                    borderRadius: BorderRadius.circular(5),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black12,
+                        blurRadius: 6.0,
+                        offset: Offset(0, 2),
+                      ),
+                    ],
+                  ),
+                  margin: const EdgeInsets.all(8),
                   child:TextField(
+
                     controller: _controller, onSubmitted: (String value) async
                   {
                     await showDialog<void>(
@@ -46,9 +85,15 @@ class RecipeScreenBody extends StatelessWidget
                     );
                   },
                     decoration: InputDecoration(
-                      hintText: 'ingredients',
-                      labelText: 'What do you have to cook ? ',
-                      prefixIcon: Icon(Icons.food_bank, color: Colors.red),
+
+                      hintText: 'What do you want to cook ? ',
+
+                      hintStyle: TextStyle(
+                        color: Color(0xFF2FE3CB),
+                        fontFamily: 'OpenSans',
+                      ),
+
+                      prefixIcon: Icon(Icons.food_bank, color: Color(0xFF2FE3CB)),
                       // icon: Icon(Icons.food),
                       suffixIcon: _controller.text.isEmpty
                           ? Container(width: 0):
@@ -68,12 +113,12 @@ class RecipeScreenBody extends StatelessWidget
                   itemBuilder: (context, index)
                   {
                     final recipe = recipes[index];
-                    return Dismissible(key: Key(recipe.title),
+                    return Dismissible(key: Key(recipe["name"]),
                         onDismissed: (direction)
                         {
                           setState(()
                           {
-                            RecipeDataBase.instance.deleteRecipe(recipe.title);
+
                           }
                           );
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -81,17 +126,32 @@ class RecipeScreenBody extends StatelessWidget
                           );
                         },
                         background: Container(color: Colors.grey),
-                        child: RecipeItemWidget(recipe: recipe)
+                        child: RecipeItemWidget(recipe)
                     );
                   },
                 ),
               )
             ]
-            );
+            ));
           }
           else
           {
-            return Center(child: Text("No Data"));
+            return Container(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                    colors: [
+                      Color(0xFF73AEF5),
+                      Color(0xFF61A4F1),
+                      Color(0xFF478DE0),
+                      Color(0xFF398AE5),
+                    ],
+                    stops: [0.1, 0.4, 0.7, 0.9],
+                  ),
+                ),
+                child:Center(
+                    child: Text("No Data")));
           }
         }
     ) ;  }

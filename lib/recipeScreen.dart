@@ -8,8 +8,8 @@ import 'package:provider/provider.dart';
 import 'favoriteWidget.dart';
 
 class RecipeScreen extends StatelessWidget {
-  const RecipeScreen({Key? key, required this.recipe}) : super(key: key);
-  final Recipe recipe;
+  RecipeScreen(this.recipe) ;
+  final dynamic recipe;
   @override
   Widget build(BuildContext context) {
     Widget titleSection = Container(
@@ -22,13 +22,13 @@ class RecipeScreen extends StatelessWidget {
                   children: [
                     Container(
                       padding: const EdgeInsets.only(bottom:8),
-                      child:Text(recipe.title,
+                      child:Text(recipe["name"],
                         style: TextStyle(
                             fontWeight: FontWeight.bold, fontSize: 20
                         ),
                       ),
                     ),
-                    Text(recipe.user,
+                    Text("no user",
                       style: TextStyle(
                           color: Colors.grey[500], fontSize: 20
                       ),)
@@ -52,24 +52,22 @@ class RecipeScreen extends StatelessWidget {
 
     Widget descriptionSection = Container(
       padding: const EdgeInsets.all(32),
-      child: Text( recipe.description,
+      child: Text( recipe["description"],
         softWrap: true,
       ),
     );
 
 
-    return ChangeNotifierProvider(
-      create: (context)=> FavoriteChangeNotifier(recipe),
-        child: Scaffold(
+    return  Scaffold(
         appBar: AppBar(
         title: Text("Shoppeez"),
       ),
       body: ListView(
                 children:[
                   Hero(
-                      tag: "imageRecipe" + recipe.title,
+                      tag: "imageRecipe" + recipe["name"],
               child : CachedNetworkImage(
-                imageUrl: recipe.imageUrl,
+                imageUrl: recipe["photo"],
                 placeholder: (context,url) => Center(child:CircularProgressIndicator()),
                 errorWidget: (context, url, error)=> Icon(Icons.error),
                 width: 600,
@@ -84,8 +82,8 @@ class RecipeScreen extends StatelessWidget {
                 ]
       ),
 
-    )
     );
+
   }
   Column _buildButtonColumn(Color color, IconData icon, String label, BuildContext context) {
     return Column(
@@ -97,7 +95,7 @@ class RecipeScreen extends StatelessWidget {
             IconButton(
                 icon: Icon(icon),
                 color: color,
-                onPressed: () => Navigator.pushNamed(context, '/recipeIngredient', arguments: recipe,)
+                onPressed: () => Navigator.pushNamed(context, '/recipeIngredient', arguments: recipe)
             ),
           ),
 

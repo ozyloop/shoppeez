@@ -1,11 +1,12 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'ingredient.dart';
 
 class ShopItemWidget extends StatelessWidget
 {
-  const ShopItemWidget({Key? key, required this.ingredient}) : super(key: key);
-  final Ingredient ingredient;
+  ShopItemWidget(this.ingredient ) ;
+  final dynamic ingredient;
 
   @override
   Widget build(BuildContext context)
@@ -23,13 +24,14 @@ class ShopItemWidget extends StatelessWidget
                     children:
                     [
                       Hero(
-                          tag: "imageIngredient" + ingredient.name,
-                          child: Image.asset(
-                            ingredient.imageUrl,
+                          tag: "imageIngredient" + ingredient["name"],
+                          child: CachedNetworkImage(
+                            imageUrl: ingredient["photo"],
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
                             width: 100,
                             height: 100,
-                            fit: BoxFit.cover,
-                          )
+                            fit: BoxFit.cover,)
                       ),
                       Padding(
                           padding: EdgeInsets.all(8),
@@ -43,13 +45,13 @@ class ShopItemWidget extends StatelessWidget
                                     Container(
                                       padding: const EdgeInsets.only(bottom: 8),
                                       child: Text(
-                                          ingredient.name,
+                                          ingredient["name"],
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               fontSize: 20)),
                                     ),
                                     Text(
-                                        ingredient.type,
+                                        "no data",
                                         style: TextStyle(color: Colors.grey[500], fontSize: 16)
                                     )
                                   ],

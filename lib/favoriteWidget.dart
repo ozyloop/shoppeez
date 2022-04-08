@@ -10,32 +10,35 @@ class FavoriteIconWidget extends StatefulWidget {
 }
 
 class _FavoriteIconWidgetState extends State<FavoriteIconWidget> {
-  late bool _isFavorited;
-  void _toggleFavorite(FavoriteChangeNotifier _notifier){
+  late dynamic recipe;
+
+   final bool isFavorited = false;
+   late bool _isFavorited = isFavorited;
+  @override
+   void _toggleFavorite(){
     setState(() {
-      if(_isFavorited)
-        {
-          _isFavorited =false;
-        }
+      if(recipe["fk_customer_id"]==null)
+      {
+        _isFavorited = false;
+      }
       else
-          {
-            _isFavorited =true;
-          }
-      _notifier.isFavorited = _isFavorited;
-    });
+      {
+        _isFavorited = true;
+      }});
   }
   @override
   Widget build(BuildContext context) {
-    FavoriteChangeNotifier _notifier = Provider.of<FavoriteChangeNotifier>(context);
-    _isFavorited = _notifier.isFavorited;
+
     return
         IconButton(
           icon: _isFavorited ? Icon(Icons.favorite) : Icon(Icons.favorite_border),
           color:Colors.red,
-          onPressed: ()=>_toggleFavorite(_notifier),
+          onPressed: ()=>_toggleFavorite(),
         );
 
   }
+
+
 }
 
 class FavoriteTextWidget extends StatefulWidget {
@@ -45,7 +48,7 @@ class FavoriteTextWidget extends StatefulWidget {
 class _FavoriteTextWidgetState extends State<FavoriteTextWidget> {
   @override
   Widget build(BuildContext context) {
-    return Consumer<FavoriteChangeNotifier>(
-      builder:(context,notifier, _) => Text(notifier.favoriteCount.toString()));
+    return Consumer(
+      builder:(context,notifier, _) => Text('yo'));//notifier.favoriteCount.toString()));
   }
 }

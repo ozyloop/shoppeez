@@ -8,6 +8,7 @@ import 'package:shoppeez/recipeDatabase.dart';
 import 'package:shoppeez/recipeScreen.dart';
 import 'package:shoppeez/recipe.dart';
 
+import 'LoginPageBody.dart';
 import 'RecipeItemWidget.dart';
 import 'RecipeScreenBody.dart';
 import 'RecipeScreenIngredient.dart';
@@ -82,9 +83,13 @@ class RecipeListScreenState extends State<RecipeListScreen>
 
           //test if index = 0 shopping list page // shopping screen body
       _selectedIndex==0 ?
+
+
       ShoppingScreenBody():
+      _selectedIndex==2 ?
       //shop screen body
-      ShopScreenBody(),
+      ShopScreenBody():
+      LoginPageBody(),
 
 
       bottomNavigationBar: BottomNavigationBar(
@@ -92,19 +97,27 @@ class RecipeListScreenState extends State<RecipeListScreen>
         [
           BottomNavigationBarItem(
             icon: Icon(Icons.article),
+            backgroundColor: Color(0xFF1860BA),
             label: 'Shopping List',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_to_home_screen),
+            backgroundColor: Color(0xFF1860BA),
             label: 'Recipe',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.add_shopping_cart),
+            backgroundColor: Color(0xFF1860BA),
             label: 'Shop',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.people),
+            backgroundColor: Color(0xFF1860BA),
+            label: 'Profile',
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.amber[800],
+        selectedItemColor: Color(0xFF2FE3CB),
         onTap: _onItemTapped,
       ),
     );
