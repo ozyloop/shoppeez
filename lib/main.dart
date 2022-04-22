@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shoppeez/RegisterPageBody.dart';
 import 'package:shoppeez/loadingPage.dart';
 import 'package:shoppeez/recipeScreen.dart';
 import 'package:shoppeez/recipe.dart';
@@ -19,6 +20,7 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,12 +37,14 @@ class MyApp extends StatelessWidget {
 }
 
 class RouteGenerator {
+
   static Route<dynamic> generateRoute(RouteSettings settings) {
+
     switch(settings.name) {
       case '/' :
         //route to test page for database
         //return MaterialPageRoute(builder: (context) => LoadingPage());
-        return MaterialPageRoute(builder: (context) => RecipeListScreen());
+        return MaterialPageRoute(builder: (context) =>  RecipeListScreen());
 
       case '/recipe':
         var arguments = settings.arguments;
@@ -58,11 +62,24 @@ class RouteGenerator {
         } else {
           return pageNotFound();
         }
-      /*case '/recipeIngredient':
+      case '/SignUp':
+
+          return PageRouteBuilder(
+              pageBuilder: (context, animation, secondaryAnimation) => RegisterPageBody(),
+              transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+                return FadeTransition(
+                  opacity: animation,
+                  child: child,
+                );
+              }
+          );
+
+      case '/recipeIngredient':
         var arguments = settings.arguments;
         if (arguments != null) {
           return PageRouteBuilder(
-              pageBuilder: (context, animation, secondaryAnimation) => RecipeScreenIngredient( ingredient: settings.arguments as Ingredient),
+              pageBuilder: (context, animation, secondaryAnimation) => RecipeScreenIngredient(settings.arguments as dynamic),
               transitionsBuilder: (context, animation, secondaryAnimation, child) {
                 animation = CurvedAnimation(curve: Curves.ease, parent: animation);
                 return FadeTransition(
@@ -73,7 +90,7 @@ class RouteGenerator {
           );
         } else {
           return pageNotFound();
-        }*/
+        }
       default:
         return pageNotFound();
     }

@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shoppeez/BddController.dart';
 import 'package:shoppeez/recipeDatabase.dart';
 
 import 'RecipeScreenIngredient.dart';
@@ -19,7 +21,9 @@ class ShoppingScreenBody extends StatelessWidget
   @override
   Future GetMethod() async
   {
-    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/getData.php");
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('customer_id') ;
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/ShoppingListItems.php?id=" + id.toString());
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
     print("${responsBody[0]}");
@@ -33,11 +37,11 @@ class ShoppingScreenBody extends StatelessWidget
   {
     return FutureBuilder(
         future: GetMethod(),
-        builder: (BuildContext context, AsyncSnapshot snapshot)
+        builder: (context, AsyncSnapshot snapshot)
         {
           if (snapshot.hasData)
           {
-            List<dynamic> ingredients = snapshot.data;
+            List<dynamic>? ingredients = snapshot.data;
             return Container(
               decoration: BoxDecoration(
                 gradient: LinearGradient(
@@ -57,7 +61,7 @@ class ShoppingScreenBody extends StatelessWidget
                 [
                   Expanded(
                     child : ListView.builder(
-                      itemCount: ingredients.length,
+                      itemCount: ingredients!.length,
                       itemBuilder: (context, index)
                       {
                         final ingredient = ingredients[index];
@@ -99,7 +103,7 @@ class ShoppingScreenBody extends StatelessWidget
                   ),
                 ),
                 child:Center(
-                    child: Text("No Data")));
+                    child: Text("Loading")));
           }
         }
     ) ;  }

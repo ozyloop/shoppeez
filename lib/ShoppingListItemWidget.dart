@@ -36,7 +36,7 @@ class ShoppingListItemWidget extends StatelessWidget
                             fit: BoxFit.cover,)
                       ),
                       Padding(
-                          padding: EdgeInsets.all(8),
+                          padding: const EdgeInsets.only(left: 8),
                           child: Row(
                               children:
                               [
@@ -55,7 +55,7 @@ class ShoppingListItemWidget extends StatelessWidget
                                       ),
                                     ),
                                     Text(
-                                        "not in the database",
+                                        ingredient["category"],
                                         style: TextStyle(
                                             color: Colors.grey[500], fontSize: 16)
                                     )
@@ -70,8 +70,8 @@ class ShoppingListItemWidget extends StatelessWidget
             Row(
                 children:
                 [
-                  Text("X"),
-                  Text(" "+ "Y"),
+                  Text(ingredient["quantity"]),
+                  Text(ingredient["quantity_type"]),
                   IconButton(
                       icon: Icon(Icons.add),
                       color: Colors.red,

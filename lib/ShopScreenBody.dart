@@ -1,6 +1,9 @@
+import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shoppeez/BddController.dart';
 import 'package:shoppeez/recipeDatabase.dart';
+import 'package:shoppeez/recipeListScreen.dart';
 
 import 'SearchBarWidget.dart';
 import 'ShopItemWidget.dart';
@@ -9,19 +12,110 @@ import 'ingredientDatabase.dart';
 
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-class ShopScreenBody extends StatelessWidget
+
+
+
+
+
+class ShopScreenBody extends StatefulWidget
+{
+
+  @override
+  State<StatefulWidget> createState()
+  {
+    return ShopScreenBodyState();
+  }
+
+}
+
+class ShopScreenBodyState extends State<ShopScreenBody>
 {
 
   final TextEditingController _controller = TextEditingController();
+  late bool sortBy=true;
+  final List<String> SortByList = ['Sort By: A-Z', 'Sort By: Z-A'];
+  late String SortText = 'Sort By: A-Z';
+  String? dropdownvalue = 'All';
+  late List<dynamic> IngredientList;
+  late List<dynamic> IngredientListStatic;
+  late ListView Cards;
+  List<String> options = <String>[
+    'All',
+    'Meat',
+    'SeaFood',
+    "Vegetable",
+    'Fruit',
+    'Spices',
+    'Dairy',
+    'Drinks',
+    'Sweets',
+    'Starch',
+    'Other',
+    'Oil',
+    'Pules',
+    'Cereal',
+    'Flavor',
+    'Sauce'
+  ];
   @override
   Future GetMethod() async
   {
+
     var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/getData.php");
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
-    print("${responsBody[0]}");
-    print("space");
+    SortAZ(true, responsBody);
     return responsBody;
+  }
+
+  @override
+  void SortAZ(bool direction, List<dynamic> ingredients)
+  {
+    if(direction){
+      ingredients.sort((a, b) => a.toString().compareTo(b.toString()));
+      setState(() {
+        IngredientList = ingredients;
+      });
+    }
+    else {
+      ingredients.sort((b,a) => a.toString().compareTo(b.toString()));
+      setState(() {
+        IngredientList = ingredients;
+      });
+    }
+  }
+
+  @override
+  void SortByCategory(String _category )
+  {
+    print(_category);
+    print('     ');
+    if(_category == 'All')
+      {
+        IngredientList =IngredientListStatic;
+      }
+    else{
+      late List<dynamic> list =[];
+      print(IngredientListStatic);
+      IngredientList.clear();
+
+      for (var i = 0; i < IngredientListStatic.length; i++) {
+
+;        if (IngredientListStatic[i]['category']== _category) {
+
+          list.add(IngredientListStatic[i]);
+        }
+        setState(() {
+          IngredientList = list;
+        });
+
+      }
+      setState(() {
+        IngredientList = list;
+        Cards ;
+      });
+
+    }
   }
 
   @override
@@ -33,7 +127,10 @@ class ShopScreenBody extends StatelessWidget
       {
           if (snapshot.hasData)
         {
-          List<dynamic>? ingredients = snapshot.data;
+          IngredientListStatic = snapshot.data;
+          IngredientList = json.decode(json.encode(IngredientListStatic));
+
+
           return Container(
               decoration: BoxDecoration(
               gradient: LinearGradient(
@@ -62,22 +159,80 @@ class ShopScreenBody extends StatelessWidget
                           mainAxisAlignment: MainAxisAlignment.center,
                           children:[ Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20),
-                              child:TextButton.icon(
-                                icon: RotatedBox(
-                                  quarterTurns: 1,
-                                  child: Icon(Icons.compare_arrows,
-                                      color: Color(0xFFFFFFFF),
-                                      size: 28),
+                              child:  DropdownButton2(
+                                isExpanded: true,
+                                hint: Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.list,
+                                      size: 16,
+                                      color: Colors.yellow,
+                                    ),
+                                    SizedBox(
+                                      width: 4,
+                                    ),
+                                    Expanded(
+                                      child: Text(
+                                        'Select Item',
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.yellow,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                label: Text(
-                                  'Sort By: All',
-                                  style: TextStyle(
-                                      color: Color(0xFFFFFFFF),
-                                      fontSize: 16),
+                                items: options
+                                    .map((item) =>
+                                    DropdownMenuItem<String>(
+                                      value: item,
+                                      child: Text(
+                                        item,
+                                        style: const TextStyle(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.white,
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ))
+                                    .toList(),
+                                value: dropdownvalue,
+                                onChanged: (value) {
+                                  SortByCategory(value as String);
+                                  setState(() {
+                                    dropdownvalue = value as String;
+                                  });
+                                },
+                                icon: const Icon(
+                                  Icons.arrow_drop_down_circle_outlined,
                                 ),
-                                onPressed: () {},
-                              )
-          ),
+                                iconSize: 20,
+                                iconEnabledColor: Colors.white,
+                                iconDisabledColor: Colors.grey,
+                                buttonHeight: 50,
+                                buttonWidth: 160,
+                                buttonPadding: const EdgeInsets.only(left: 14, right: 20),
+
+
+                                itemHeight: 40,
+                                itemPadding: const EdgeInsets.only(left: 14, right: 14),
+
+
+                                dropdownPadding: null,
+                                dropdownDecoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(14),
+                                  color: Color(0xFF398AE5),
+                                ),
+                                dropdownElevation: 8,
+                                scrollbarRadius: const Radius.circular(40),
+                                scrollbarThickness: 6,
+                                scrollbarAlwaysShow: true,
+                                offset: const Offset(-5, 0),
+                              ),
+                          ),
 
 
 
@@ -129,12 +284,22 @@ class ShopScreenBody extends StatelessWidget
                               size: 28),
                         ),
                         label: Text(
-                          'Sort By: A-Z',
+                          SortText,
                           style: TextStyle(
                               color: Color(0xFFFFFFFF),
                               fontSize: 16),
                         ),
-                        onPressed: () {},
+                        onPressed: () {
+
+                          if(sortBy){ setState(() {
+                            sortBy = false;
+                            SortText=SortByList[1];
+                          });}
+                          else {setState(() {
+                            sortBy = true;
+                            SortText=SortByList[0];
+                          }) ;}
+                        },
                       )
 
 
@@ -156,12 +321,11 @@ class ShopScreenBody extends StatelessWidget
                       width: MediaQuery.of(context).size.width,
                       height: 800,
                       child:
-                      Expanded(
-                        child: ListView.builder(
-                          itemCount: ingredients!.length,
+                       Cards = ListView.builder(
+                          itemCount: IngredientList.length,
                           itemBuilder: (context, index)
                           {
-                            final ingredient = ingredients[index];
+                            final ingredient = IngredientList[index];
                             return Dismissible(
                                 key: Key(ingredient["name"]),
                                 onDismissed: (direction)
@@ -172,7 +336,7 @@ class ShopScreenBody extends StatelessWidget
                                   }
                                   );
                                   ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("${ingredient["name"]} supprimé"))
+                                  SnackBar(content: Text("supprimé"))
                                   );
                                 },
                                 background: Container(color: Colors.grey),
@@ -180,7 +344,7 @@ class ShopScreenBody extends StatelessWidget
                             );
                           },
                         ),
-                      ),
+
                     ),
                   ]
               ),
@@ -244,12 +408,15 @@ class ShopScreenBody extends StatelessWidget
                 ),
               ),
               child:Center(
-                  child: Text("No Data")));
+                  child: Text("Loading")));
         }
       }
     );
   }
-  void setState(Null Function() param0) {}
+
+
+
+
 }
 
 

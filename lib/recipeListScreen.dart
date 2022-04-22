@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppeez/ShopScreenBody.dart';
 import 'package:shoppeez/ShoppingScreenBody.dart';
 import 'package:shoppeez/ingredient.dart';
@@ -9,9 +12,11 @@ import 'package:shoppeez/recipeScreen.dart';
 import 'package:shoppeez/recipe.dart';
 
 import 'LoginPageBody.dart';
+import 'ProfilePage.dart';
 import 'RecipeItemWidget.dart';
 import 'RecipeScreenBody.dart';
 import 'RecipeScreenIngredient.dart';
+import 'RegisterPageBody.dart';
 import 'SearchBarWidget.dart';
 import 'ShopItemWidget.dart';
 import 'ingredientDatabase.dart';
@@ -26,6 +31,8 @@ class RecipeListScreen extends StatefulWidget
   {
     return RecipeListScreenState();
   }
+
+
 }
 
 
@@ -34,13 +41,36 @@ class RecipeListScreenState extends State<RecipeListScreen>
   int _selectedIndex=1;
   late TextEditingController _controller;
 
+  late int id ;
+  @override
+  void getId() async {
+    final prefs = await SharedPreferences.getInstance();
+    id = prefs.getInt('customer_id')!;
+  }
+  @override
+  void Refresh() async {
+    var prefs = await SharedPreferences.getInstance();
+    var customer_id = prefs.getInt('customer_id') ;
+    print('yo');
+  setState(() {
+    id = customer_id!;
+  });
+
+
+
+  }
+
+
+
+
+
   @override
   void _onItemTapped(int index)
   {
     setState(()
     {
-      print(_selectedIndex);
       _selectedIndex = index;
+
     }
     );
   }
@@ -71,6 +101,7 @@ class RecipeListScreenState extends State<RecipeListScreen>
   @override
   Widget build(BuildContext context)
   {
+    getId();
     return Scaffold(
       appBar: AppBar(
         title: Text("Shoppeez"),
@@ -89,7 +120,10 @@ class RecipeListScreenState extends State<RecipeListScreen>
       _selectedIndex==2 ?
       //shop screen body
       ShopScreenBody():
-      LoginPageBody(),
+      id == 0 ?
+      LoginPageBody(Refresh):
+
+      ProfilePageBody(Refresh),
 
 
       bottomNavigationBar: BottomNavigationBar(

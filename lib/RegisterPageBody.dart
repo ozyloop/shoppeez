@@ -1,14 +1,9 @@
-
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:shoppeez/main.dart';
 import 'package:shoppeez/recipeDatabase.dart';
-import 'package:shoppeez/recipeListScreen.dart';
 
-import 'CustomerLocalSave.dart';
 import 'RecipeScreenIngredient.dart';
 import 'SearchBarWidget.dart';
 import 'ShopItemWidget.dart';
@@ -17,56 +12,35 @@ import 'ingredient.dart';
 import 'ingredientDatabase.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'CustomerLocalSave.dart';
 
 
-class LoginPageBody extends StatefulWidget
-{
-  late Function Refresh;
-
-  LoginPageBody(this.Refresh);
-  @override
-  State<StatefulWidget> createState()
-  {
-    return LoginPageBodyState();
-  }
-
-}
-
-class LoginPageBodyState extends State<LoginPageBody>
+class RegisterPageBody extends StatelessWidget
 {
 
   final TextEditingController _controller = TextEditingController();
-
+  final _First_Name = TextEditingController();
+  final _Last_Name = TextEditingController();
   final _Email = TextEditingController();
   final _Password = TextEditingController();
 
+  String First_name="";
+  String Last_name="";
   String Email="";
   String Password="";
 
 
 
   @override
-  void Login() async
+  void Register() async
   {
-
-
-    var theUrl2 = Uri.parse("https://shoppeaz.000webhostapp.com/Login.php?email="+Email +"&password=" +Password);
-    var res = await http.get(theUrl2, headers: {"Accept":"application/json"});
-    var Customer_ID = json.decode(res.body);
-    IdRepository().save(int.parse(Customer_ID[0]['customer_ID']));
-    final prefs = await SharedPreferences.getInstance();
-    final counter = prefs.getInt('customer_id') ;
-    this.widget.Refresh();
-
-    print(counter);
-
-  }
-  void _setText() {
-    Email = _Email.text;
-    Password = _Password.text;
-    Login();
-
-
+  print(First_name);
+  var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/Register.php?first_name=" + First_name +"&last_name=" + Last_name + "&email=" + Email + "&password=" + Password);
+  await http.get(theUrl, headers: {"Accept":"application/json"});
+  var theUrl2 = Uri.parse("https://shoppeaz.000webhostapp.com/Login.php?email="+Email +"&password=" +Password);
+  var res = await http.get(theUrl2, headers: {"Accept":"application/json"});
+  var Customer_ID = json.decode(res.body);
+  IdRepository().save(int.parse(Customer_ID[0]['customer_ID']));
 
   }
   @override
@@ -75,7 +49,18 @@ class LoginPageBodyState extends State<LoginPageBody>
     var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/getData.php");
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
+
     return responsBody;
+  }
+  void _setText() {
+
+      First_name = _First_Name.text;
+      Last_name = _Last_Name.text;
+      Email = _Email.text;
+      Password = _Password.text;
+
+
+    Register();
   }
   bool _rememberMe = false;
 
@@ -121,6 +106,113 @@ class LoginPageBodyState extends State<LoginPageBody>
                 color: Colors.white,
               ),
               hintText: 'Enter your Email',
+              hintStyle: TextStyle(
+                color: Colors.white54,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildFirstName() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'First Name',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Color(0xFF6CA8F1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          height: 60.0,
+          child: TextField(
+            controller: _First_Name,
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.people,
+                color: Colors.white,
+              ),
+              hintText: 'Enter your First Name',
+              hintStyle: TextStyle(
+                color: Colors.white54,
+                fontFamily: 'OpenSans',
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLastName() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Last Name',
+          style: TextStyle(
+
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Color(0xFF6CA8F1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          height: 60.0,
+          child: TextField(
+            controller: _Last_Name,
+            keyboardType: TextInputType.emailAddress,
+            style: TextStyle(
+              color: Colors.white,
+              fontFamily: 'OpenSans',
+            ),
+            decoration: InputDecoration(
+              border: InputBorder.none,
+              contentPadding: EdgeInsets.only(top: 14.0),
+              prefixIcon: Icon(
+                Icons.people,
+                color: Colors.white,
+              ),
+              hintText: 'Enter your Last Name',
               hintStyle: TextStyle(
                 color: Colors.white54,
                 fontFamily: 'OpenSans',
@@ -234,7 +326,7 @@ class LoginPageBodyState extends State<LoginPageBody>
     );
   }
 
-  Widget _buildLoginBtn(BuildContext context) {
+  Widget _buildRegisterBtn(BuildContext context) {
     return Container(
       padding: EdgeInsets.symmetric(vertical: 25.0),
       width: double.infinity,
@@ -247,7 +339,7 @@ class LoginPageBodyState extends State<LoginPageBody>
         ),
         color: Colors.white,
         child: Text(
-          'LOGIN',
+          'Register',
           style: TextStyle(
             color: Color(0xFF527DAA),
             letterSpacing: 1.5,
@@ -260,7 +352,7 @@ class LoginPageBodyState extends State<LoginPageBody>
     );
   }
 
-  Widget _buildSignInWithText() {
+  Widget _buildSignUpWithText() {
     return Column(
       children: <Widget>[
         Text(
@@ -272,7 +364,7 @@ class LoginPageBodyState extends State<LoginPageBody>
         ),
         SizedBox(height: 20.0),
         Text(
-          'Sign in with',
+          'Sign Up with',
           style: TextStyle(
             color: Colors.white,
             fontWeight: FontWeight.bold,
@@ -316,13 +408,13 @@ class LoginPageBodyState extends State<LoginPageBody>
           _buildSocialBtn(
                 () => print('Login with Facebook'),
             AssetImage(
-              'assets/logos/facebook.jpg',
+              'images/butter.jpg',
             ),
           ),
           _buildSocialBtn(
                 () => print('Login with Google'),
             AssetImage(
-              'assets/logos/google.jpg',
+              'images/butter.jpg',
             ),
           ),
         ],
@@ -330,35 +422,6 @@ class LoginPageBodyState extends State<LoginPageBody>
     );
   }
 
-  Widget _buildSignupBtn(BuildContext context) {
-    return GestureDetector(
-      onTap: () => Navigator.pushNamed(
-        context,
-        '/SignUp'),
-      child: RichText(
-        text: TextSpan(
-          children: [
-            TextSpan(
-              text: 'Don\'t have an Account? ',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextSpan(
-              text: 'Sign Up',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -398,7 +461,7 @@ class LoginPageBodyState extends State<LoginPageBody>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Sign In',
+                        'Sign Up',
                         style: TextStyle(
                           color: Colors.white,
                           fontFamily: 'OpenSans',
@@ -408,15 +471,19 @@ class LoginPageBodyState extends State<LoginPageBody>
                       ),
                       SizedBox(height: 30.0),
                       _buildEmailTF(),
+                      SizedBox(height: 30.0),
+                      _buildFirstName(),
+                      SizedBox(height: 30.0),
+                      _buildLastName(),
                       SizedBox(
                         height: 30.0,
                       ),
                       _buildPasswordTF(),
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
-                      _buildLoginBtn(context),
+                      _buildRegisterBtn(context),
 
-                      _buildSignupBtn(context),
+
                     ],
                   ),
                 ),
@@ -428,6 +495,6 @@ class LoginPageBodyState extends State<LoginPageBody>
     );
   }
 
-
+  void setState(Null Function() param0) {}
 }
 

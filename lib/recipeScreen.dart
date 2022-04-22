@@ -46,7 +46,7 @@ class RecipeScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
             _buildIconColumn(Colors.blue, Icons.people, "2"),
-            _buildButtonColumn(Colors.blue, Icons.food_bank, "Ingredients", context),
+            _buildRecipeIngredientColumn(Colors.blue, Icons.food_bank, "Ingredients", context),
             _buildButtonColumn(Colors.blue, Icons.add_shopping_cart, "Add List", context)
           ] ),);
 
@@ -86,6 +86,29 @@ class RecipeScreen extends StatelessWidget {
 
   }
   Column _buildButtonColumn(Color color, IconData icon, String label, BuildContext context) {
+    return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            padding: const EdgeInsets.only(bottom: 8),
+            child:
+            IconButton(
+                icon: Icon(icon),
+                color: color,
+                onPressed: () => print('pressed')
+            ),
+          ),
+
+          Text(label,
+              style: TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                color: color,
+              ))
+        ]
+    );
+  }
+  Column _buildRecipeIngredientColumn(Color color, IconData icon, String label, BuildContext context) {
     return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

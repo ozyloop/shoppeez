@@ -51,7 +51,7 @@ class ShopItemWidget extends StatelessWidget
                                               fontSize: 20)),
                                     ),
                                     Text(
-                                        "no data",
+                                        ingredient['category'],
                                         style: TextStyle(color: Colors.grey[500], fontSize: 16)
                                     )
                                   ],

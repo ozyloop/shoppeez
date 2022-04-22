@@ -1,11 +1,26 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppeez/recipe.dart';
-
+import 'package:http/http.dart' as http;
 class RecipeItemWidget extends StatelessWidget
 {
   RecipeItemWidget(this.recipe) ;
   final dynamic recipe;
+
+  @override
+  void AddRecipeIngredient() async
+  {
+    final prefs = await SharedPreferences.getInstance();
+    final customer_id = prefs.getInt('customer_id') ;
+    print(customer_id.toString());
+    print(recipe["recipe_id"]);
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/AddRecipeIngredients.php?customer_id="+customer_id.toString()+"&recipe_id="+recipe["recipe_id"]);
+    print("https://shoppeaz.000webhostapp.com/AddRecipeIngredients.php?customer_id="+customer_id.toString()+"&recipe_id=5"+recipe["recipe_id"]);
+    await http.get(theUrl, headers: {"Accept":"application/json"});
+
+  }
+
   @override
   Widget build(BuildContext context)
   {
@@ -45,7 +60,7 @@ class RecipeItemWidget extends StatelessWidget
                               )
                           ),
                           Padding(
-                              padding: EdgeInsets.all(8),
+                              padding: const EdgeInsets.only(left: 8),
                               child:Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children:
@@ -72,7 +87,7 @@ class RecipeItemWidget extends StatelessWidget
                   child:IconButton(
                       icon: Icon(Icons.add),
                       color: Colors.red,
-                      onPressed: () => print("works")
+                      onPressed: () => AddRecipeIngredient()
                   ),
                 )
               ]

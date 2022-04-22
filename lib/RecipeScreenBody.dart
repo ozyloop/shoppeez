@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shoppeez/recipe.dart';
 import 'package:shoppeez/recipeDatabase.dart';
 
@@ -22,11 +23,11 @@ class RecipeScreenBody extends StatelessWidget
     var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/GetRecipe.php");
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
-    print("${responsBody[0]}");
-    print("space");
     return responsBody;
   }
 
+
+//https://shoppeaz.000webhostapp.com/AddRecipeIngredients.php?customer_id=4&recipe_id=5
   @override
   Widget build(BuildContext context)
   {
@@ -151,7 +152,7 @@ class RecipeScreenBody extends StatelessWidget
                   ),
                 ),
                 child:Center(
-                    child: Text("No Data")));
+                    child: Text("Loading")));
           }
         }
     ) ;  }
