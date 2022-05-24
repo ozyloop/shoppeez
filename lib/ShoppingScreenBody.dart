@@ -26,12 +26,19 @@ class ShoppingScreenBody extends StatelessWidget
     var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/ShoppingListItems.php?id=" + id.toString());
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
-    print("${responsBody[0]}");
-    print("space");
+
     return responsBody;
   }
 
-
+  @override
+  void DeleteIngredient(String name) async
+  {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('customer_id') ;
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/DeleteIngredientShoppingList.php?name=" + name+"&customer_id=" +id.toString());
+    var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+    var responsBody = json.decode(res.body);
+  }
   @override
   Widget build(BuildContext context)
   {
@@ -67,16 +74,11 @@ class ShoppingScreenBody extends StatelessWidget
                         final ingredient = ingredients[index];
                         return Dismissible(key: Key(ingredient["name"]),
                             onDismissed: (direction)
-                            {
-                              setState(()
-                              {
+                      {
+                      DeleteIngredient(ingredient["name"]);
 
-                              }
-                              );
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text("${ingredient.name} supprimé"))
-                              );
-                            },
+
+                      },
                             background: Container(color: Colors.grey),
                             child: ShoppingListItemWidget(ingredient)
                         );

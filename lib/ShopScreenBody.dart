@@ -35,15 +35,16 @@ class ShopScreenBodyState extends State<ShopScreenBody>
   late bool sortBy=true;
   final List<String> SortByList = ['Sort By: A-Z', 'Sort By: Z-A'];
   late String SortText = 'Sort By: A-Z';
-  String? dropdownvalue = 'All';
+  String dropdownvalue = 'All';
   late List<dynamic> IngredientList;
   late List<dynamic> IngredientListStatic;
   late ListView Cards;
+  late String search = "";
   List<String> options = <String>[
     'All',
     'Meat',
     'SeaFood',
-    "Vegetable",
+    'Vegetable',
     'Fruit',
     'Spices',
     'Dairy',
@@ -57,78 +58,77 @@ class ShopScreenBodyState extends State<ShopScreenBody>
     'Flavor',
     'Sauce'
   ];
+
+
   @override
-  Future GetMethod() async
+  Future  GetSpecialData() async
   {
 
-    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/getData.php");
-    var res = await http.get(theUrl, headers: {"Accept":"application/json"});
-    var responsBody = json.decode(res.body);
-    SortAZ(true, responsBody);
-    return responsBody;
+    if(dropdownvalue == "All")
+      {
+        var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/ResearchIngredient.php?search="+search);
+        var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+        var responsBody = json.decode(res.body);
+
+        setState(() {
+          IngredientList = responsBody;
+        });
+        IngredientList = SortAZ(sortBy, IngredientList);
+        print('     ');
+        return IngredientList;
+
+      }
+    else
+      {
+        var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/Filter.php?category=" + dropdownvalue+"&search="+search);
+        var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+        var responsBody = json.decode(res.body);
+
+        setState(() {
+          IngredientList = responsBody;
+        });
+        IngredientList = SortAZ(sortBy, IngredientList);
+        return IngredientList;
+      }
+
+
   }
 
+
   @override
-  void SortAZ(bool direction, List<dynamic> ingredients)
+  List<dynamic> SortAZ(bool direction, List<dynamic> ingredients)
   {
     if(direction){
       ingredients.sort((a, b) => a.toString().compareTo(b.toString()));
       setState(() {
         IngredientList = ingredients;
       });
+
+      return IngredientList;
     }
     else {
       ingredients.sort((b,a) => a.toString().compareTo(b.toString()));
       setState(() {
         IngredientList = ingredients;
       });
+
+      return IngredientList;
     }
   }
 
-  @override
-  void SortByCategory(String _category )
-  {
-    print(_category);
-    print('     ');
-    if(_category == 'All')
-      {
-        IngredientList =IngredientListStatic;
-      }
-    else{
-      late List<dynamic> list =[];
-      print(IngredientListStatic);
-      IngredientList.clear();
 
-      for (var i = 0; i < IngredientListStatic.length; i++) {
-
-;        if (IngredientListStatic[i]['category']== _category) {
-
-          list.add(IngredientListStatic[i]);
-        }
-        setState(() {
-          IngredientList = list;
-        });
-
-      }
-      setState(() {
-        IngredientList = list;
-        Cards ;
-      });
-
-    }
-  }
 
   @override
   Widget build(BuildContext context)
   {
     return FutureBuilder(
-      future: GetMethod(),
+      future: GetSpecialData(),
       builder: (BuildContext context, AsyncSnapshot snapshot)
       {
           if (snapshot.hasData)
         {
-          IngredientListStatic = snapshot.data;
-          IngredientList = json.decode(json.encode(IngredientListStatic));
+
+          IngredientList = snapshot.data;
 
 
           return Container(
@@ -152,7 +152,52 @@ class ShopScreenBodyState extends State<ShopScreenBody>
 
                   ListView(
                   children:
-                  [
+                  [Container(
+                      decoration: BoxDecoration(
+                        color: Color(0xFF1860BA),
+                        borderRadius: BorderRadius.circular(5),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6.0,
+                            offset: Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      margin: const EdgeInsets.all(8),
+                      child:TextField(
+
+                    controller: _controller, onSubmitted: (String value) async
+                  {
+                    setState(() {
+                      search = value;
+                    });
+                    GetSpecialData();
+                    print('executed');
+
+                  },
+                    decoration: InputDecoration(
+
+                      hintText: 'What do you want to cook ? ',
+
+                      hintStyle: TextStyle(
+                        color: Color(0xFF2FE3CB),
+                        fontFamily: 'OpenSans',
+                      ),
+
+                      prefixIcon: Icon(Icons.food_bank, color: Color(0xFF2FE3CB)),
+                      // icon: Icon(Icons.food),
+                      suffixIcon: _controller.text.isEmpty
+                          ? Container(width: 0):
+                      IconButton(
+                        icon: Icon(Icons.close),
+                        onPressed: () =>  _controller.text ="",
+                      ),
+                      border: OutlineInputBorder(),
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.done,
+                  )),
                     Container(
 
                         child:Row(
@@ -201,10 +246,13 @@ class ShopScreenBodyState extends State<ShopScreenBody>
                                     .toList(),
                                 value: dropdownvalue,
                                 onChanged: (value) {
-                                  SortByCategory(value as String);
+
                                   setState(() {
                                     dropdownvalue = value as String;
+
                                   });
+
+
                                 },
                                 icon: const Icon(
                                   Icons.arrow_drop_down_circle_outlined,
@@ -239,40 +287,7 @@ class ShopScreenBodyState extends State<ShopScreenBody>
 
 
 
-                    //use after when clic on the research button
-                    /*TextField(
-                                controller: _controller,
-                                onSubmitted: (String value) async
-                                {
-                                  await showDialog<void>(
-                                    context: context,
-                                    builder: (BuildContext context)
-                                    {
-                                      return AlertDialog(
-                                        title: const Text('Thanks!'),
-                                        content: Text('You typed "$value", which has length ${value.characters.length}.'),
-                                        actions: <Widget>[
-                                        ],
-                                      );
-                                    },
-                                  );
-                                },
-                                decoration: InputDecoration(
-                                  hintText: 'ingredients',
-                                  labelText: 'What do you have to cook ? ',
-                                  prefixIcon: Icon(Icons.food_bank, color: Colors.red),
-                                  // icon: Icon(Icons.food),
-                                  suffixIcon: _controller.text.isEmpty
-                                      ? Container(width: 0) :
-                                  IconButton(
-                                    icon: Icon(Icons.close),
-                                    onPressed: () =>  _controller.text ="",
-                                  ),
-                                  border: OutlineInputBorder(),
-                                ),
-                                keyboardType: TextInputType.emailAddress,
-                                textInputAction: TextInputAction.done,
-                              )*/
+
 
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 20),
@@ -292,13 +307,18 @@ class ShopScreenBodyState extends State<ShopScreenBody>
                         onPressed: () {
 
                           if(sortBy){ setState(() {
+
                             sortBy = false;
                             SortText=SortByList[1];
+
                           });}
+
                           else {setState(() {
                             sortBy = true;
                             SortText=SortByList[0];
-                          }) ;}
+                          });}
+                          print(sortBy);
+
                         },
                       )
 
@@ -325,7 +345,7 @@ class ShopScreenBodyState extends State<ShopScreenBody>
                           itemCount: IngredientList.length,
                           itemBuilder: (context, index)
                           {
-                            final ingredient = IngredientList[index];
+                            dynamic ingredient = IngredientList[index];
                             return Dismissible(
                                 key: Key(ingredient["name"]),
                                 onDismissed: (direction)
@@ -348,46 +368,6 @@ class ShopScreenBodyState extends State<ShopScreenBody>
                     ),
                   ]
               ),
-
-      Positioned(
-                  bottom:10,
-                  right: 10,
-                  child:
-                  Container(
-                    height: 40,
-                    width: 40,
-                    child: DecoratedBox(
-                      child: IconButton(
-                          padding: EdgeInsets.zero,
-                          icon: Icon(Icons.search, color: Theme.of(context).primaryColor, size: 35,), onPressed: () {
-                        Navigator.of(context).pop();
-                      }),
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(12)
-                      ),
-                    ),
-                  )
-              ),
-
-               /*Positioned(
-                bottom:10,
-                right: 10,
-
-                child: ElevatedButton(
-                  style: TextButton.styleFrom(primary: Colors.white, backgroundColor: Colors.blue, fixedSize: Size(60,55), minimumSize: Size(50,40)),
-                  onPressed: ()
-                  {
-                    SearchBar(context, _controller).then((result)
-                      {
-                        print('In Builder');
-                      }
-                    );
-                  },
-                  child: const Icon(Icons.search, size:30 ),
-
-                ),
-              )*/
             ]
           ));
         }

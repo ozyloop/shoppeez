@@ -1,17 +1,83 @@
+import 'dart:convert';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'ingredient.dart';
+import 'package:http/http.dart' as http;
 
-class ShopItemWidget extends StatelessWidget
+class ShopItemWidget extends StatefulWidget
 {
   ShopItemWidget(this.ingredient ) ;
   final dynamic ingredient;
 
   @override
+  State<StatefulWidget> createState()
+  {
+    return ShopItemWidgetState(ingredient);
+  }
+
+}
+
+class ShopItemWidgetState extends State<ShopItemWidget>
+{
+  ShopItemWidgetState(this.ingredient ) ;
+  final dynamic ingredient;
+
+  late double quantity = double.parse(ingredient["quantity_reference"]);
+  @override
+  void SetShoppingListQuantity() async
+  {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('customer_id') ;
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/ShoppingListItems.php?id=" + id.toString());
+    var res = await http.get(theUrl, headers: {"Accept":"application/json"});
+    var responsBody = json.decode(res.body);
+
+     Calculus(responsBody);
+
+
+  }
+
+  @override
+  void Calculus(dynamic shoppingList) async
+  {
+
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('customer_id') ;
+    bool found = false;
+    for (var j = 0; j < shoppingList.length; j++) {
+      if(ingredient['name']==shoppingList[j]['name'])
+        {
+
+          var quantity_shopping_list = quantity + double.parse(shoppingList[j]['quantity']);
+          var theUrl2 = Uri.parse("https://shoppeaz.000webhostapp.com/SetQuantityShoppingList.php?quantity=" + quantity_shopping_list.toString()+"&name="+shoppingList[j]['name']);
+          var res2 = await http.get(theUrl2, headers: {"Accept":"application/json"});
+          var responsBody2 = json.decode(res2.body);
+          found = true;
+        }
+    }
+    if(found == false)
+      {
+
+        var theUrl2 = Uri.parse("https://shoppeaz.000webhostapp.com/AddIngredientShoppingList.php?name=" + ingredient["name"] +"&customer_id="+ id.toString()+"&quantity="+quantity.toString());
+        var res2 = await http.get(theUrl2, headers: {"Accept":"application/json"});
+        var responsBody2 = json.decode(res2.body);
+      }
+  }
+
+  @override
   Widget build(BuildContext context)
   {
-    return Card(
+    return GestureDetector(
+        onTap: ()
+    {
+
+      SetShoppingListQuantity();
+    },
+
+      child : Card(
       margin: EdgeInsets.all(8),
       elevation: 4,
       child: Row(
@@ -69,18 +135,27 @@ class ShopItemWidget extends StatelessWidget
                   IconButton(
                       icon: Icon(Icons.remove),
                       color: Colors.red,
-                      onPressed: () => print("works")
+                      onPressed: () {
+      quantity = quantity - double.parse(ingredient["quantity_reference"]);
+      print(quantity);
+
+    }
                   ),
-                  Text("3"),
+                  Text(quantity.toString()),
+                  Text(ingredient["quantity_type_reference"]),
                   IconButton(
                       icon: Icon(Icons.add),
                       color: Colors.red,
-                      onPressed: () => print("works")
-                  ),
+                      onPressed: () {
+                        quantity = quantity + double.parse(ingredient["quantity_reference"]);
+                        print(quantity);
+
+                      }
+                    ),
                 ]
             )
           ]
       ),
-    );
+    ));
   }
 }

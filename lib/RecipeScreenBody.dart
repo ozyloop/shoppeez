@@ -12,17 +12,38 @@ import 'ingredientDatabase.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
-
-class RecipeScreenBody extends StatelessWidget
+class RecipeScreenBody extends StatefulWidget
 {
 
-  final TextEditingController _controller = TextEditingController();
   @override
-  Future GetMethod() async
+  State<StatefulWidget> createState()
   {
-    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/GetRecipe.php");
+    return RecipeScreenBodyState();
+  }
+
+}
+
+class RecipeScreenBodyState extends State<RecipeScreenBody>
+{
+  late List<dynamic> recipes;
+  late String search = "";
+
+
+  final TextEditingController _controller = TextEditingController();
+
+
+
+  @override
+  Future GetResearch() async
+  {
+    final prefs = await SharedPreferences.getInstance();
+    final id = prefs.getInt('customer_id');
+    var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/Research.php?search="+search+"&customer_id="+id.toString());
     var res = await http.get(theUrl, headers: {"Accept":"application/json"});
     var responsBody = json.decode(res.body);
+    setState(() {
+      recipes  = responsBody ;
+    });
     return responsBody;
   }
 
@@ -32,12 +53,12 @@ class RecipeScreenBody extends StatelessWidget
   Widget build(BuildContext context)
   {
     return FutureBuilder(
-        future: GetMethod(),
+        future: GetResearch(),
         builder: (BuildContext context, AsyncSnapshot snapshot)
         {
           if (snapshot.hasData)
           {
-            List<dynamic>? recipes = snapshot.data;
+             recipes = snapshot.data;
             return Container(
                 decoration: BoxDecoration(
                   gradient: LinearGradient(
@@ -54,6 +75,7 @@ class RecipeScreenBody extends StatelessWidget
                 ),
         child: Column(children:
             [
+              //research bar
               Container(
                   decoration: BoxDecoration(
                     color: Color(0xFF1860BA),
@@ -69,21 +91,16 @@ class RecipeScreenBody extends StatelessWidget
                   margin: const EdgeInsets.all(8),
                   child:TextField(
 
-                    controller: _controller, onSubmitted: (String value) async
+                    controller: _controller, onSubmitted: (String value)
                   {
-                    await showDialog<void>(
-                      context: context,
-                      builder: (BuildContext context)
-                      {
-                        return AlertDialog(
-                          title: const Text('Thanks!'),
-                          content: Text('You typed "$value", which has length ${value.characters.length}.'),
-                          actions: <Widget>
-                          [
-                          ],
-                        );
-                      },
-                    );
+
+
+                    setState(() {
+                      search = value;
+                    });
+                    GetResearch();
+                    print('executed');
+
                   },
                     decoration: InputDecoration(
 
@@ -110,7 +127,7 @@ class RecipeScreenBody extends StatelessWidget
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: recipes!.length,
+                  itemCount: recipes.length,
                   itemBuilder: (context, index)
                   {
                     final recipe = recipes[index];
@@ -157,7 +174,7 @@ class RecipeScreenBody extends StatelessWidget
         }
     ) ;  }
 
-  void setState(Null Function() param0) {}
+
 }
 
 

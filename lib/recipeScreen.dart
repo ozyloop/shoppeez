@@ -34,7 +34,7 @@ class RecipeScreen extends StatelessWidget {
                       ),)
                   ]
               ),),
-            FavoriteIconWidget(),
+            FavoriteIconWidget(recipe),
             FavoriteTextWidget(),
           ],
         ));

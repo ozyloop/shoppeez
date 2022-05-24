@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -28,20 +29,30 @@ class RegisterPageBody extends StatelessWidget
   String Last_name="";
   String Email="";
   String Password="";
+  String Photo="";
+
+
 
 
 
   @override
   void Register() async
   {
-  print(First_name);
-  var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/Register.php?first_name=" + First_name +"&last_name=" + Last_name + "&email=" + Email + "&password=" + Password);
+
+  var theUrl = Uri.parse("https://shoppeaz.000webhostapp.com/Register.php?first_name=" + First_name +"&last_name=" + Last_name + "&email=" + Email + "&password=" + Password+ "&profile_pic="+Photo);
   await http.get(theUrl, headers: {"Accept":"application/json"});
   var theUrl2 = Uri.parse("https://shoppeaz.000webhostapp.com/Login.php?email="+Email +"&password=" +Password);
   var res = await http.get(theUrl2, headers: {"Accept":"application/json"});
   var Customer_ID = json.decode(res.body);
   IdRepository().save(int.parse(Customer_ID[0]['customer_ID']));
 
+  }
+
+  @override
+  void initProfilePic(String profilePicUrl) async
+  {
+    Photo = profilePicUrl;
+    print(Photo);
   }
   @override
   Future GetMethod() async
@@ -276,6 +287,144 @@ class RegisterPageBody extends StatelessWidget
       ],
     );
   }
+  Widget ChoicePhoto() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          'Choose Your Character',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontFamily: 'OpenSans',
+          ),
+        ),
+        SizedBox(height: 10.0),
+        Container(
+          alignment: Alignment.centerLeft,
+          decoration: BoxDecoration(
+            color: Color(0xFF6CA8F1),
+            borderRadius: BorderRadius.circular(10.0),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 6.0,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          height: 120.0,
+          child: Column(
+              children:[
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      ElevatedButton(
+                      onPressed: () {
+                        initProfilePic("https://i.postimg.cc/bd6XfwMp/017.png");
+                      },
+                      child: CachedNetworkImage(
+                      imageUrl: "https://i.postimg.cc/bd6XfwMp/017.png",
+                      placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                      width: 50,
+                      height: 60,
+                      fit: BoxFit.cover,)),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/rKzBVLXW/018.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/rKzBVLXW/018.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/kVPzv6VF/019.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/kVPzv6VF/019.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/WdkxZ641/020.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/WdkxZ641/020.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                    ]
+                ),
+                Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children:[
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/tYfL7mpc/021.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/tYfL7mpc/021.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/4KvMLfVC/022.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/4KvMLfVC/022.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/k6nHL0v2/023.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/k6nHL0v2/023.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                      ElevatedButton(
+                          onPressed: () {
+                            initProfilePic("https://i.postimg.cc/jwZ1TMMZ/024.png");
+                          },
+                          child: CachedNetworkImage(
+                            imageUrl: "https://i.postimg.cc/jwZ1TMMZ/024.png",
+                            placeholder: (context, url) => Center(child: CircularProgressIndicator()),
+                            errorWidget: (context, url, error) => Icon(Icons.error),
+                            width: 50,
+                            height: 60,
+                            fit: BoxFit.cover,)
+                      ),
+                    ]
+                )
+          ])
+        ),
+      ],
+    );
+  }
 
   Widget _buildForgotPasswordBtn() {
     return Container(
@@ -475,10 +624,11 @@ class RegisterPageBody extends StatelessWidget
                       _buildFirstName(),
                       SizedBox(height: 30.0),
                       _buildLastName(),
-                      SizedBox(
-                        height: 30.0,
-                      ),
+                      SizedBox(height: 30.0, ),
+
                       _buildPasswordTF(),
+                      SizedBox(height: 30.0, ),
+                      ChoicePhoto(),
                       _buildForgotPasswordBtn(),
                       _buildRememberMeCheckbox(),
                       _buildRegisterBtn(context),

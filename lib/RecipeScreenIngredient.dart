@@ -44,9 +44,6 @@ class RecipeScreenIngredient extends StatelessWidget {
                 title: Text("Shoppeez"),
               ),
               body:
-
-
-
                               ListView.builder(
                                 physics: const AlwaysScrollableScrollPhysics(),
                                  scrollDirection: Axis.vertical,

@@ -2,6 +2,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:shoppeez/FavoriteScreenBody.dart';
 import 'package:shoppeez/RegisterPageBody.dart';
 import 'package:shoppeez/loadingPage.dart';
 import 'package:shoppeez/recipeScreen.dart';
@@ -11,6 +12,7 @@ import 'package:shoppeez/recipeListScreen.dart';
 import 'package:transparent_image/transparent_image.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'CustomerLocalSave.dart';
 import 'RecipeScreenIngredient.dart';
 import 'ingredient.dart';
 import 'package:http/http.dart' as http;
@@ -44,6 +46,7 @@ class RouteGenerator {
       case '/' :
         //route to test page for database
         //return MaterialPageRoute(builder: (context) => LoadingPage());
+        IdRepository().save(0);
         return MaterialPageRoute(builder: (context) =>  RecipeListScreen());
 
       case '/recipe':
@@ -74,6 +77,18 @@ class RouteGenerator {
                 );
               }
           );
+      case '/Favorite':
+
+        return PageRouteBuilder(
+            pageBuilder: (context, animation, secondaryAnimation) => FavoriteScreenBody(),
+            transitionsBuilder: (context, animation, secondaryAnimation, child) {
+              animation = CurvedAnimation(curve: Curves.ease, parent: animation);
+              return FadeTransition(
+                opacity: animation,
+                child: child,
+              );
+            }
+        );
 
       case '/recipeIngredient':
         var arguments = settings.arguments;
